@@ -1,6 +1,6 @@
 console.debug("Wordle Hint is started.");
 
-function setHint(msg) {
+function setHint(msg, win = false) {
   const newHintBox = document.createElement("div");
 
   newHintBox.setAttribute("id", "wordle-hint-box");
@@ -11,7 +11,14 @@ function setHint(msg) {
   newHintBox.style.top = "10px";
   newHintBox.style.left = "10px";
   newHintBox.style.padding = "8px";
+  newHintBox.style.background = "white";
   newHintBox.style.boxShadow = "0 2px 4px 1px #ddd";
+
+  if (win) {
+    newHintBox.style.background = "#6aaa64";
+    newHintBox.style.color = "white";
+    newHintBox.style.fontSize = "22px";
+  }
 
   const oldHintBox = document.getElementById("wordle-hint-box");
   if (oldHintBox) {
@@ -21,9 +28,39 @@ function setHint(msg) {
   document.body.appendChild(newHintBox);
 }
 
+function getMaxFrequency(string) {
+  const freq = {};
+
+  for (let i = 0; i < string.length; i++) {
+    const character = string.charAt(i);
+
+    if (freq[character]) {
+      freq[character]++;
+    } else {
+      freq[character] = 1;
+    }
+  }
+
+  const maxFreq = Math.max(...Object.values(freq));
+
+  return maxFreq;
+}
+
+function countCommonAlpha(string) {
+  let counting = 0;
+
+  string.split("").forEach((i) => {
+    if ("aeiourtnsl".split("").includes(i)) {
+      counting++;
+    }
+  });
+
+  return counting;
+}
+
 async function findIt() {
   setHint("Opening a dictionary...");
-  await new Promise((r) => setTimeout(r, 3000));
+  await new Promise((r) => setTimeout(r, 2000));
 
   const revealedAlphas = {
     present: [],
@@ -53,7 +90,7 @@ async function findIt() {
         index: revealedTiles.indexOf(tile) % 5,
         alpha,
       });
-    } else {
+    } else if (eval === "absent") {
       revealedAlphas.absent.push(alpha);
     }
   });
@@ -73,7 +110,7 @@ async function findIt() {
 
   console.debug(revealedAlphas);
 
-  const filteredWords = wordlist.filter((word) => {
+  let filteredWords = wordlist.filter((word) => {
     for (const alpha of word) {
       if (revealedAlphas.absent.includes(alpha)) return false;
 
@@ -89,10 +126,37 @@ async function findIt() {
     return true;
   });
 
+  filteredWords = filteredWords.sort((left, right) => {
+    return getMaxFrequency(left) - countCommonAlpha(left) - (getMaxFrequency(right) - countCommonAlpha(right));
+  });
+
+  console.debug(filteredWords)
+
+  const sliceWords = filteredWords.slice(0, 25);
+  let hintMsg = "";
   if (filteredWords.length > 50) {
-    setHint(filteredWords.slice(0, 25).join("<br/>"));
+    sliceWords.forEach((item, index) => {
+      if (index < 5) {
+        hintMsg += `<strong>${index + 1}. ${item}</strong><br/>`;
+      } else {
+        hintMsg += `${index + 1}. ${item}<br/>`;
+      }
+    });
+
+    hintMsg += `+${filteredWords.length - 25} more...`;
+    setHint(hintMsg);
+  } else if (filteredWords.length > 1) {
+    sliceWords.forEach((item, index) => {
+      if (index < 5) {
+        hintMsg += `<strong>${index + 1}. ${item}</strong><br/>`;
+      } else {
+        hintMsg += `${index + 1}. ${item}<br/>`;
+      }
+    });
+    setHint(hintMsg);
   } else {
-    setHint(filteredWords.join("<br/>"));
+    hintMsg = `<strong>${filteredWords[0]}</strong>`;
+    setHint(hintMsg, true);
   }
 }
 
