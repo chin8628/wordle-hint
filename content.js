@@ -1,12 +1,14 @@
 console.debug("Wordle Hint is started.");
 
-const revealedAlphas = {
-  present: [],
-  absent: [],
-  correct: [],
-};
+async function findIt() {
+  await new Promise((r) => setTimeout(r, 3000));
 
-window.addEventListener("load", (event) => {
+  const revealedAlphas = {
+    present: [],
+    absent: [],
+    correct: [],
+  };
+
   const gamerows = document.body
     .querySelector("game-app")
     .shadowRoot.querySelectorAll("game-theme-manager #game game-row:not([letters=''])");
@@ -28,4 +30,32 @@ window.addEventListener("load", (event) => {
       revealedAlphas[eval].push(alpha);
     }
   });
-});
+
+  console.debug(revealedAlphas);
+
+  const filteredWords = wordlist.filter((word) => {
+    for (const alpha of word) {
+      if (revealedAlphas.absent.includes(alpha)) return false;
+      if (!revealedAlphas.present.every((a) => word.includes(a))) return false;
+
+      for (const correct of revealedAlphas.correct) {
+        if (word[correct.index] != correct.alpha) return false;
+      }
+    }
+
+    return true;
+  });
+}
+
+document.addEventListener(
+  "keydown",
+  (event) => {
+    const keyName = event.key;
+    if (keyName !== "Enter") {
+      return;
+    }
+
+    findIt();
+  },
+  false
+);
