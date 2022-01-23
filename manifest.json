@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Wordle Hint",
+  "version": "0.0.1",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.powerlanguage.co.uk/wordle/"
+      ],
+      "js": [
+        "./wordlist.js",
+        "./content.js"
+      ]
+    }
+  ],
+  "permissions": [
+    "activeTab"
+  ]
+}
