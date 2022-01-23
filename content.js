@@ -28,7 +28,7 @@ function setHint(msg, win = false) {
   document.body.appendChild(newHintBox);
 }
 
-function getMaxFrequency(string) {
+function getTotalDupFrequency(string) {
   const freq = {};
 
   for (let i = 0; i < string.length; i++) {
@@ -41,9 +41,14 @@ function getMaxFrequency(string) {
     }
   }
 
-  const maxFreq = Math.max(...Object.values(freq));
+  let totalFreq = 0;
+  Object.values(freq).forEach((alpha) => {
+    if (alpha > 1) {
+      totalFreq += alpha;
+    }
+  });
 
-  return maxFreq;
+  return totalFreq;
 }
 
 function countCommonAlpha(string) {
@@ -127,10 +132,10 @@ async function findIt() {
   });
 
   filteredWords = filteredWords.sort((left, right) => {
-    return getMaxFrequency(left) - countCommonAlpha(left) - (getMaxFrequency(right) - countCommonAlpha(right));
+    return getTotalDupFrequency(left) - countCommonAlpha(left) - (getTotalDupFrequency(right) - countCommonAlpha(right));
   });
 
-  console.debug(filteredWords)
+  console.debug(filteredWords);
 
   const sliceWords = filteredWords.slice(0, 25);
   let hintMsg = "";
