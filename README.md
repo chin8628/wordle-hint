@@ -7,6 +7,4 @@ Wordle Hint is a chrome extension to narrow down possibility of words based on r
 https://www.youtube.com/watch?v=hIRX1dpfqHc
 
 ## Preview
-
-https://user-images.githubusercontent.com/2943187/150939763-70e2c8a2-9f2b-4e31-9e7a-3b30c4c76282.mp4
-
+<img src="https://user-images.githubusercontent.com/2943187/150940462-c7e809f9-4de5-44cb-a54f-4df17a3ec577.jpg">
