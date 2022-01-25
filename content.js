@@ -118,21 +118,25 @@ async function findIt() {
   let filteredWords = wordlist.filter((word) => {
     for (const alpha of word) {
       if (revealedAlphas.absent.includes(alpha)) return false;
+    }
 
-      for (const present of revealedAlphas.present) {
-        if (word[present.index] == present.alpha) return false;
-      }
+    for (const present of revealedAlphas.present) {
+      if (word[present.index] == present.alpha) return false;
 
-      for (const correct of revealedAlphas.correct) {
-        if (word[correct.index] != correct.alpha) return false;
-      }
+      if (!word.split("").includes(present.alpha)) return false;
+    }
+
+    for (const correct of revealedAlphas.correct) {
+      if (word[correct.index] != correct.alpha) return false;
     }
 
     return true;
   });
 
   filteredWords = filteredWords.sort((left, right) => {
-    return getTotalDupFrequency(left) - countCommonAlpha(left) - (getTotalDupFrequency(right) - countCommonAlpha(right));
+    return (
+      getTotalDupFrequency(left) - countCommonAlpha(left) - (getTotalDupFrequency(right) - countCommonAlpha(right))
+    );
   });
 
   console.debug(filteredWords);
