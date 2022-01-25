@@ -1,7 +1,13 @@
 {
   "manifest_version": 3,
   "name": "Wordle Hint",
-  "version": "0.0.1",
+  "description": "Wordle Hint is an extension to narrow down possibility of words based on revealed alphabets.",
+  "version": "1.0.0",
+  "icons": {
+    "16": "./resources/icon-16.png",
+    "48": "./resources/icon-48.png",
+    "128": "./resources/icon-128.png"
+  },
   "content_scripts": [
     {
       "matches": [
@@ -12,8 +18,5 @@
         "./content.js"
       ]
     }
-  ],
-  "permissions": [
-    "activeTab"
   ]
 }
