@@ -1,31 +1,86 @@
 console.debug("Wordle Hint is started.");
 
-function setHint(msg, win = false) {
-  const newHintBox = document.createElement("div");
+function injectStyle() {
+  const style = document.createElement("style")
+  style.innerHTML = `
+    #wordle-hint-toggle {
+      background: #f6f7f8;
+      font-size: 16px;
+      box-shadow: 0 2px 5px 1px #ddd;
+      border: 1px solid #878A94;
+      padding: 4px 8px;
+      cursor: pointer;
+      position: relative;
+    }
 
-  newHintBox.setAttribute("id", "wordle-hint-box");
-  newHintBox.innerHTML = msg;
+    #wordle-hint-toggle:hover {
+      background-color: #fff;
+      box-shadow: 0 2px 5px 3px #ddd;
+    }
 
-  newHintBox.style.border = "1px solid gray";
-  newHintBox.style.position = "absolute";
-  newHintBox.style.top = "10px";
-  newHintBox.style.left = "10px";
-  newHintBox.style.padding = "8px";
-  newHintBox.style.background = "white";
-  newHintBox.style.boxShadow = "0 2px 4px 1px #ddd";
+    #wordle-hint-toggle:active {
+      background: #f6f7f8;
+      box-shadow: 0 2px 5px 1px #ddd;
+    }
+
+    #wordle-hint-box {
+      position: relative;
+      margin-top: 8px;
+      border: 1px solid gray;
+      padding: 8px;
+      background: white;
+      box-shadow: 0 2px 4px 1px #ddd;
+    }
+
+    #wordle-hint-box.win {
+      background = #6aaa64;
+      color = white;
+      fontSize = 22px;
+    }
+
+    #wordle-hint-box.hidden {
+      display: none;
+    }
+  `;
+
+  document.head.appendChild(style)
+}
+
+function injectExtionsionHTML() {
+  const block = document.createElement("div");
+
+  block.innerHTML = `
+    <div id="wordle-hint-block" style="position: absolute; top: 10px; left: 10px;">
+      <button id="wordle-hint-toggle" type="button">Show</button>
+      <div id="wordle-hint-box" class="hidden">
+        Press <i>Enter</i> key</br>
+        (on your physical keyboard)
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(block);
+}
+
+function handleToggleBtn() {
+  const button = document.getElementById("wordle-hint-toggle")
+  const cl = document.getElementById("wordle-hint-box").classList
+  cl.toggle("hidden")
+  
+  if (cl.contains("hidden")) {
+    button.innerText = "Show"
+  } else {
+    button.innerText = "Hide"
+  }
+}
+
+function setHint(msg = "", win = false) {
+  const hintBox = document.getElementById("wordle-hint-box");
+  hintBox.innerHTML = msg;
 
   if (win) {
-    newHintBox.style.background = "#6aaa64";
-    newHintBox.style.color = "white";
-    newHintBox.style.fontSize = "22px";
+    hintBox.setAttribute("class", "win")
   }
-
-  const oldHintBox = document.getElementById("wordle-hint-box");
-  if (oldHintBox) {
-    document.body.removeChild(oldHintBox);
-  }
-
-  document.body.appendChild(newHintBox);
 }
 
 function getTotalDupFrequency(string) {
@@ -152,7 +207,7 @@ async function findIt() {
       }
     });
 
-    hintMsg += `+${filteredWords.length - 25} more...`;
+    hintMsg += `</br>+${filteredWords.length - 25} more...`;
     setHint(hintMsg);
   } else if (filteredWords.length > 1) {
     sliceWords.forEach((item, index) => {
@@ -169,6 +224,9 @@ async function findIt() {
   }
 }
 
+injectStyle()
+injectExtionsionHTML();
+
 document.addEventListener(
   "keydown",
   (event) => {
@@ -181,3 +239,5 @@ document.addEventListener(
   },
   false
 );
+
+document.getElementById("wordle-hint-toggle").addEventListener("click", handleToggleBtn)
