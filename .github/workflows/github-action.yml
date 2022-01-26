@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: sudo apt install zip
-      - run: zip -r extension.zip ./src
+      - run: zip -r extension.zip ./src/*
       - uses: actions/upload-artifact@v2
         with: 
           name: zipped-extension
