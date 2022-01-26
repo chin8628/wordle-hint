@@ -9,9 +9,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: sudo apt install zip
-      - run: zip -r extionsion.zip ./src
+      - run: zip -r extension.zip ./src
       - uses: actions/upload-artifact@v2
         with: 
           name: zipped-extension
-          path: ./extension.zip
+          path: extension.zip
           retention-days: 7
+          if-no-files-found: error
