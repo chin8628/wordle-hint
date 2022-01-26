@@ -2,7 +2,7 @@
 
 set -e
 
-token=`curl \
+res=`curl \
 --silent \
 --fail \
 -H "Content-Type: application/json" \
@@ -13,11 +13,13 @@ token=`curl \
 	"grant_type": "refresh_token"
 }' \
 -X POST \
--v https://www.googleapis.com/oauth2/v4/token \
-| \
-jq -r '.access_token'`
+-v https://www.googleapis.com/oauth2/v4/token`
 
-status=`curl \
+echo $res | jq '.'
+
+token=`echo $res | jq -r '.access_token'`
+
+res=`curl \
 --silent \
 --show-error \
 --fail \
@@ -25,11 +27,13 @@ status=`curl \
 -H "x-goog-api-version: 2" \
 -X PUT \
 -T extension.zip \
--v https://www.googleapis.com/upload/chromewebstore/v1.1/items/icinedakgbcmhanlhfhckigdeefompfg \
-| \
-jq -r '.uploadState'`
+-v https://www.googleapis.com/upload/chromewebstore/v1.1/items/icinedakgbcmhanlhfhckigdeefompfg`
 
-if [ $status == 'FAILURE' ]
+echo $res | jq '.'
+
+apiStatus=`echo $res | jq -r '.uploadState'`
+
+if [ $apiStatus == 'FAILURE' ]
 then
   exit 1
 fi
