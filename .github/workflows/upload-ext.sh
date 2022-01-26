@@ -15,8 +15,6 @@ res=`curl \
 -X POST \
 -v https://www.googleapis.com/oauth2/v4/token`
 
-echo $res | jq '.'
-
 token=`echo $res | jq -r '.access_token'`
 
 res=`curl \
