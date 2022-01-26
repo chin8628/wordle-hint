@@ -24,6 +24,10 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: zipped-extension
       - run: sudo apt install jq
       - run: .github/workflows/upload-ext.sh ${{ secrets.REFRESH_TOKEN }} ${{ env.CLIENT_ID }} ${{ secrets.CLIENT_SECRET }}
       
