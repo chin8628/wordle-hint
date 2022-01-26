@@ -1,8 +1,13 @@
 name: Build and Publish
+
 on: 
   push:
     branches:
       - main
+
+env:
+  CLIENT_ID: 172061369072-co5renooroqon3mdueaq14u7f9232u33.apps.googleusercontent.com
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,3 +21,9 @@ jobs:
           path: extension.zip
           retention-days: 7
           if-no-files-found: error
+  publish:
+    runs-on: runs-on: ubuntu-latest
+    steps:
+      - run: sudo apt install jq
+      - run: .github/workflows/upload-ext.sh ${{ secrets.REFRESH_TOKEN }} ${{ env.CLIENT_ID }} ${{ secrets.CLIENT_SECRET }}
+      
