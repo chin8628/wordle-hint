@@ -33,9 +33,9 @@ function injectStyle() {
     }
 
     #wordle-hint-box.win {
-      background = #6aaa64;
-      color = white;
-      fontSize = 22px;
+      background: #6aaa64;
+      color: white;
+      fontSize: 22px;
     }
 
     #wordle-hint-box.hidden {
