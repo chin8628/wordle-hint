@@ -34,23 +34,4 @@ then
   exit 1
 fi
 
-  publish=`curl \
-  --silent \
-  --show-error \
-  --fail \
-  -H "Authorization: Bearer $token" \
-  -H "x-goog-api-version: 2" \
-  -X POST \
-  -T extension.zip \
-  -v https://www.googleapis.com/upload/chromewebstore/v1.1/items/icinedakgbcmhanlhfhckigdeefompfg/publish \
-  -d publishTarget=default \
-  | \
-  jq -r '.publishState'`
-
-  if [ $publish == 'FAILURE' ]
-  then
-    exit 1
-  fi
-fi
-
 exit 0
