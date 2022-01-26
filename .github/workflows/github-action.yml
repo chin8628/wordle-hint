@@ -30,5 +30,5 @@ jobs:
         with:
           name: zipped-extension
       - run: sudo apt install jq
-      - run: .github/workflows/upload-ext.sh ${{ secrets.REFRESH_TOKEN }} ${{ env.CLIENT_ID }} ${{ secrets.CLIENT_SECRET }}
+      - run: .github/workflows/upload-ext.bash ${{ secrets.REFRESH_TOKEN }} ${{ env.CLIENT_ID }} ${{ secrets.CLIENT_SECRET }}
       

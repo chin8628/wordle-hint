@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
-res=`curl \
+token=`curl \
 --silent \
 --fail \
 -H "Content-Type: application/json" \
@@ -13,9 +13,8 @@ res=`curl \
 	"grant_type": "refresh_token"
 }' \
 -X POST \
--v https://www.googleapis.com/oauth2/v4/token`
-
-token=`echo $res | jq -r '.access_token'`
+-v https://www.googleapis.com/oauth2/v4/token \
+| jq -r '.access_token'`
 
 res=`curl \
 --silent \
@@ -31,7 +30,7 @@ echo $res | jq '.'
 
 apiStatus=`echo $res | jq -r '.uploadState'`
 
-if [ $apiStatus == 'FAILURE' ]
+if [[ "$apiStatus" == 'FAILURE' ]]
 then
   exit 1
 fi
