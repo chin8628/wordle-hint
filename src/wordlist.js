@@ -1,4 +1,4 @@
-const words = [
+const wordlist = [
 	"cigar",
 	"rebut",
 	"sissy",

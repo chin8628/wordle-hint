@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo -e "const words = [" > wordlist.js
+echo -e "const wordlist = [" > wordlist.js
 
 input="wordlist.txt"
 while IFS= read -r line
