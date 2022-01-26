@@ -4,7 +4,14 @@ on:
     branches:
       - main
 jobs:
-  Build:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - uses: actions/checkout@v2
+      - run: apt install zip
+      - run: zip -r extionsion.zip ./src
+      - uses: actions/upload-artifact@v2
+        with: 
+          name: zipped-extension
+          path: ./extension.zip
+          retention-days: 7
