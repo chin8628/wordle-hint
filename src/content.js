@@ -41,6 +41,12 @@ function injectStyle() {
     #wordle-hint-box.hidden {
       display: none;
     }
+
+    #wordle-hint-block {
+      position: absolute; 
+      top: 60px; 
+      left: 10px;
+    }
   `;
 
   document.head.appendChild(style)
@@ -50,7 +56,7 @@ function injectExtionsionHTML() {
   const block = document.createElement("div");
 
   block.innerHTML = `
-    <div id="wordle-hint-block" style="position: absolute; top: 10px; left: 10px;">
+    <div id="wordle-hint-block">
       <button id="wordle-hint-toggle" type="button">Show</button>
       <div id="wordle-hint-box" class="hidden">
         Press <i>Enter</i> key</br>
@@ -79,7 +85,7 @@ function setHint(msg = "", win = false) {
   hintBox.innerHTML = msg;
 
   if (win) {
-    hintBox.setAttribute("class", "win")
+    hintBox.classList.add("win")
   }
 }
 
